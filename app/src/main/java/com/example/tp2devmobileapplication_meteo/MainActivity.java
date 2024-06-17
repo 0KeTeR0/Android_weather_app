@@ -37,6 +37,7 @@ public class MainActivity extends AppCompatActivity{
     private static final int LOCATION_PERMISSION_REQUEST_CODE = 1;
     private TextView pageTitle, coordinate, dateTimeLabel, temperatureLabel, humidityLabel, windStrengthLabel, windDirectionLabel, rainLevelLabel;
     private ImageButton gpsButton, searchButton, nextButton, prevButton;
+    private Location localisation;
     private EditText searchField;
     private ImageView imageMeteo;
 
@@ -121,16 +122,20 @@ public class MainActivity extends AppCompatActivity{
     private void performSearch() {
         new Thread(() -> {
             String city = searchField.getText().toString();
-            com.example.tp2devmobileapplication_meteo.Location location = new com.example.tp2devmobileapplication_meteo.Location(city, 47.311f, 5.069f);
+            com.example.tp2devmobileapplication_meteo.Location location = new com.example.tp2devmobileapplication_meteo.Location(city, 47.311f, 8.069f);
+            if(localisation != null){
+                location = new com.example.tp2devmobileapplication_meteo.Location(city, (float) localisation.getLatitude(), (float) localisation.getLongitude());
+            }
             IForecastProvider forecastProvider = new OpenMeteoProvider();
             currentForecast = forecastProvider.getForecast(location);
 
+            com.example.tp2devmobileapplication_meteo.Location finalLocation = location;
             runOnUiThread(() -> {
                 if (currentForecast != null && currentForecast.getSize() > 0) {
                     currentForecastIndex = 0;
                     Weather firstWeather = currentForecast.getForecast(currentForecastIndex);
                     showWeather(firstWeather);
-                    showLocation(location);
+                    showLocation(finalLocation);
                 } else {
                     // Handle the case where no forecast data is available
                     Log.e(TAG, "No forecast data available");
@@ -211,6 +216,7 @@ public class MainActivity extends AppCompatActivity{
                 if (task.isSuccessful() && task.getResult() != null) {
                     Location location = task.getResult();
                     performLocationSearch(location);
+                    localisation = location;
                 } else {
                     // Handle the case where no location is found or task failed
                 }
@@ -221,14 +227,10 @@ public class MainActivity extends AppCompatActivity{
     private void performLocationSearch(Location location) {
         searchField.setText("");  // netoie le champs search
         com.example.tp2devmobileapplication_meteo.Location loc = new com.example.tp2devmobileapplication_meteo.Location("", (float) location.getLatitude(), (float) location.getLongitude());
-        IForecastProvider forecastProvider = new HardcodedForecastProvider();
-        WeatherForecast forecast = forecastProvider.getForecast(loc);
+        //IForecastProvider forecastProvider = new OpenMeteoProvider();
+        //WeatherForecast forecast = forecastProvider.getForecast(loc);
 
-        if (forecast.getSize() > 0) {
-            Weather firstWeather = forecast.getForecast(0);
-            showWeather(firstWeather);
-            showLocation(loc);
-        }
+        showLocation(loc);
     }
 
     @Override
