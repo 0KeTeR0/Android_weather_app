@@ -8,12 +8,12 @@ public class Weather {
     private int hour;
     private WeatherCodes weatherCode;
     private int temperature;
-    private int humidity;
+    private float humidity;
     private int windSpeed;
     private String windDirection;
     private float precipitation;
 
-    public Weather(int day, int hour, WeatherCodes weatherCodes, int temperature, int humidity, int windSpeed, String windDirection, int precipitation) {
+    public Weather(int day, int hour, WeatherCodes weatherCodes, int temperature, float humidity, int windSpeed, String windDirection, float precipitation) {
         this.day = day;
         this.hour = hour;
         this.weatherCode = weatherCodes;
@@ -22,6 +22,10 @@ public class Weather {
         this.windSpeed = windSpeed;
         this.windDirection = windDirection;
         this.precipitation = precipitation;
+    }
+
+    public Weather() {
+
     }
 
     /**
@@ -92,7 +96,7 @@ public class Weather {
      * Gets the humidity
      * @return humidity in % (45 = 45% humidity)
      */
-    public int getHumidity() {
+    public float getHumidity() {
         return humidity;
     }
 

@@ -4,6 +4,7 @@ import android.Manifest;
 import android.content.pm.PackageManager;
 import android.location.Location;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageButton;
@@ -44,6 +45,7 @@ public class MainActivity extends AppCompatActivity{
     private int currentForecastIndex = 0;
     private WeatherForecast currentForecast;
 
+    private static final String TAG = "OpenMeteoProvider";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -117,28 +119,34 @@ public class MainActivity extends AppCompatActivity{
     }
 
     private void performSearch() {
-        String city = searchField.getText().toString();
-        com.example.tp2devmobileapplication_meteo.Location location = new com.example.tp2devmobileapplication_meteo.Location(city, 47.311f, 5.069f);
-        IForecastProvider forecastProvider = new HardcodedForecastProvider();
-        currentForecast = forecastProvider.getForecast(location);
+        new Thread(() -> {
+            String city = searchField.getText().toString();
+            com.example.tp2devmobileapplication_meteo.Location location = new com.example.tp2devmobileapplication_meteo.Location(city, 47.311f, 5.069f);
+            IForecastProvider forecastProvider = new OpenMeteoProvider();
+            currentForecast = forecastProvider.getForecast(location);
 
-        if (currentForecast.getSize() > 0) {
-            currentForecastIndex = 0;
-            Weather firstWeather = currentForecast.getForecast(currentForecastIndex);
-            showWeather(firstWeather);
-            showLocation(location);
-        }
+            runOnUiThread(() -> {
+                if (currentForecast != null && currentForecast.getSize() > 0) {
+                    currentForecastIndex = 0;
+                    Weather firstWeather = currentForecast.getForecast(currentForecastIndex);
+                    showWeather(firstWeather);
+                    showLocation(location);
+                } else {
+                    // Handle the case where no forecast data is available
+                    Log.e(TAG, "No forecast data available");
+                }
+            });
+        }).start();
     }
 
     private void showWeather(Weather weather) {
         String formattedDateTime = realDay(weather.getDay(), weather.getHour());
         dateTimeLabel.setText(formattedDateTime);
-
-        temperatureLabel.setText("Temperature: " + weather.getTemperature() + "°C");
-        humidityLabel.setText("Humidity: " + weather.getHumidity() + "%");
-        windStrengthLabel.setText("Wind Speed: " + weather.getWindSpeed() + " km/h");
-        windDirectionLabel.setText("Wind Direction: " + weather.getWindDirection());
-        rainLevelLabel.setText("Rain Level: " + weather.getPrecipitation() + " mm");
+        temperatureLabel.setText(getString(R.string.Temperature_Label) + ": " + weather.getTemperature() + "°C");
+        humidityLabel.setText(getString(R.string.Humidity_Label) + ": " + weather.getHumidity() + "%");
+        windStrengthLabel.setText(getString(R.string.windStrength_Label) + ": " + weather.getWindSpeed() + " km/h");
+        windDirectionLabel.setText(getString(R.string.windDirection_Label) + ": " + weather.getWindDirection());
+        rainLevelLabel.setText(getString(R.string.rainLevel_Label) + ": " + weather.getPrecipitation() + " mm");
         ImageView weatherImage = findViewById(R.id.image_meteo);
 
         switch (weather.getWeatherCode()) {
@@ -182,7 +190,7 @@ public class MainActivity extends AppCompatActivity{
     private void showLocation(com.example.tp2devmobileapplication_meteo.Location location) {
         String latDMS = GeoLocFormat.latitudeDMS(location.getLatitude());
         String lonDMS = GeoLocFormat.longitudeDMS(location.getLongitude());
-        coordinate.setText("Location: " + location.getCity() + " (" + latDMS + ", " + lonDMS + ")");
+        coordinate.setText(getString(R.string.Coordinate_Label) + ": " + location.getCity() + " (" + latDMS + ", " + lonDMS + ")");
     }
 
     private void requestLocation() {

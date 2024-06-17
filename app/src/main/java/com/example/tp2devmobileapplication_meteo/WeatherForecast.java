@@ -1,6 +1,7 @@
 package com.example.tp2devmobileapplication_meteo;
 
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Composes forecast on several hours/days
@@ -9,7 +10,11 @@ public class WeatherForecast implements IForecastProvider{
     private ArrayList<Weather> datas;
 
     public WeatherForecast(){
-        datas = new ArrayList<>();
+        this.datas = new ArrayList<>();
+    }
+
+    public WeatherForecast(List<Weather> weathers){
+        this.datas = new ArrayList<>(weathers);
     }
 
     /**
