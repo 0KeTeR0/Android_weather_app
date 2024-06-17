@@ -1,11 +1,12 @@
 <resources>
     <string name="app_name">TP 2 Dev Mobile Application_Meteo</string>
     <string name="Temperature_Label">Temperature</string>
-    <string name="Humidity_Label">Humidity 25 %</string>
-    <string name="windStrength_Label">Wind strength 12km/h</string>
-    <string name="windDirection_Label">Wind direction NW</string>
-    <string name="rainLevel_Label">Rain level 0,00 mm</string>
+    <string name="Humidity_Label">Humidity</string>
+    <string name="windStrength_Label">Wind strength</string>
+    <string name="windDirection_Label">Wind direction</string>
+    <string name="rainLevel_Label">Rain level</string>
     <string name="CurrentDateTime_Label">Sunday March 26, 2023 - 10 a.m.</string>
     <string name="MeteoTitle_Label">Meteo</string>
     <string name="search_button">Research button</string>
+    <string name="Coordinate_Label">Location</string>
 </resources>

@@ -2,11 +2,12 @@
 <resources>
     <string name="app_name">TP 2 Dev Mobile Application_Meteo</string>
     <string name="Temperature_Label">Température</string>
-    <string name="Humidity_Label">Humidité 25 %</string>
-    <string name="windStrength_Label">Vitesse du vent 12km/h</string>
-    <string name="windDirection_Label">Direction du vent NO</string>
-    <string name="rainLevel_Label">Précipitations 0,0 mm</string>
+    <string name="Humidity_Label">Humidité</string>
+    <string name="windStrength_Label">Vitesse du vent</string>
+    <string name="windDirection_Label">Direction du vent</string>
+    <string name="rainLevel_Label">Précipitations</string>
     <string name="CurrentDateTime_Label">Dimanche 26 mars 2023 - 10h</string>
     <string name="MeteoTitle_Label">Météo</string>
     <string name="search_button">Boutton de recherche</string>
+    <string name="Coordinate_Label">Coordonnées</string>
 </resources>
