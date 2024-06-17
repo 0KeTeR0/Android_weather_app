@@ -8,8 +8,8 @@ public class Location {
     private float latitude;
     private float longitude;
 
-    public Location(String paris, float lat, float lgt) {
-        this.city = paris;
+    public Location(String city, float lat, float lgt) {
+        this.city = city;
         this.latitude = lat;
         this.longitude = lgt;
     }
